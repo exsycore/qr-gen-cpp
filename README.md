@@ -2,6 +2,13 @@
 (Project made by newbie)
 This is the basic way to create QR-Code using cpp-httplib, libpng, zlib. Thank you very much. Without them, my project would not have happened.
 
+# How to use
+Run program
+```bash
+Input Your Link: https://www.example.example
+Input Your Port: 8080
+```
+
 # Build
 ```bash
 git clone --recursive https://github.com/exsycore/qr-gen-cpp.git
