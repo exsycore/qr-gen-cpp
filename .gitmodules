@@ -1,0 +1,6 @@
+[submodule "libs/cpp-httplib"]
+	path = libs/cpp-httplib
+	url = https://github.com/yhirose/cpp-httplib.git
+[submodule "libs/libpng"]
+	path = libs/libpng
+	url = https://github.com/pnggroup/libpng.git
