@@ -10,6 +10,7 @@ Input Your Port: 8080
 ```
 
 # Build
+Windows
 ```bash
 git clone --recursive https://github.com/exsycore/qr-gen-cpp.git
 cd qr-gen-cpp
