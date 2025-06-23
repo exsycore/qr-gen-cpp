@@ -1,8 +1,6 @@
 #include "main.hpp"
 
 using namespace qrcodegen;
-httplib::Server svr;
-// httplib::SSLServer svr;
 
 std::string generate_qr_png_memory(const std::string &text)
 {
@@ -86,19 +84,52 @@ std::string generate_qr_png(const std::string &text, const std::string &filename
 
 int main()
 {
+    httplib::Server svr;
+    // httplib::SSLServer svr;
+
     std::string url;
+    int Port = 8080;
     std::cout << "Input Your Link: ";
-    std::cin >> url;
+    std::getline(std::cin, url);
+    std::cout << "Input Your Port: ";
+    std::cin >> Port;
+
+    if (url.empty())
+    {
+        std::cerr << "URL is empty. Exiting.\n";
+        return 1;
+    }
 
     svr.Get("/gen", [&](const httplib::Request &req, httplib::Response &res) 
     {
-        std::string text = req.body;
-        
-        std::string png_data = generate_qr_png_memory(url);
-        res.set_content(png_data, "image/png");
+        std::string png_data;
+        try
+        {
+            png_data = generate_qr_png_memory(url);
+            res.set_content(png_data, "image/png");
+        }
+        catch (const std::exception &ex)
+        {
+            res.status = 500;
+            res.set_content("Internal Error: " + std::string(ex.what()), "text/plain");
+        }
+        catch (...)
+        {
+            res.status = 500;
+            res.set_content("Unknown error", "text/plain");
+        }
     });
-    std::cout << "QR-API at http://localhost:8080/gen\n";
-    svr.listen("0.0.0.0", 8080);
+    std::cout << "QR-API at http://127.0.0.1:" << Port << "/gen\n";
+
+    if (!svr.is_valid())
+    {
+        std::cerr << "Server is not valid.\n";
+    }
+    if (!svr.listen("127.0.0.1", Port))
+    {
+        std::cerr << "Failed to bind port " << Port << ". Is it already in use?\n";
+        return 2;
+    }
 
     return 0;
 }
